@@ -2,8 +2,9 @@ import requests,json,telebot,time
 from bs4 import BeautifulSoup
 from telebot import TeleBot,types
 from translate import Translator
+import os
 # здесь мы реализуем обработку получения запроса по тегу для продажи аккаунта
-getUserToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6ImNiZmE0MzZkLTM5NTEtNDlmOC1iMTBiLWFlMjZlNjZkMzA2NiIsImlhdCI6MTcxMDI2OTg2NSwic3ViIjoiZGV2ZWxvcGVyL2E4ZDY5YjZmLWY3NWUtZDYxZS0wMzc5LTM4ZWM2YzgwZTVlYyIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiNDUuNzkuMjE4Ljc5Il0sInR5cGUiOiJjbGllbnQifV19.8VvHF6GLKmX19etMgBHQNyoIUfcpBbZYn3bLnUK--cDGqXZ8UPvCNBQo654I_QQgwYJnGOd7rWsZSKmgS1Lldw'
+getUserToken = os.getenv("USER_TOKEN")
 data=0
 lan="en"
 def getuserinfo(url,token):
@@ -46,7 +47,7 @@ def translate(text, target_language='en'):
     return translation
 
 
-tgToken = '6880510908:AAG6M6orlQNXRuPTAPh9TMDSJlkJYpZoXIA'
+tgToken = os.getenv("TG_TOKEN")
 bot = TeleBot(tgToken)
 state = {}
 tag=""
@@ -177,101 +178,7 @@ def mes2(message):
         except:
             bot.send_message(message.chat.id, translate("enter integer",lan))
             state[message.chat.id] = "blings"
-    
+ЯКЩО ХОЧЕТЕ ПРОДОВЖЕННЯ БОТА, ЗАМОВЛЯЙТЕ У МЕНЕ
 
-    
-@bot.message_handler(func=lambda message: state.get(message.chat.id) == "coins")
-def mes3(message):
-    global coins
-    if message.text == translate("back to main menu",lan).lower():
-        state[message.chat.id] = "mainmenu" 
-        firstMenu = types.InlineKeyboardMarkup()
-        buttonStartCalculate = types.InlineKeyboardButton(translate("Calculate Your Price💰",lan), callback_data="calculate")
-        button_choose_language=types.InlineKeyboardButton(translate("change the language",lan), callback_data="changelan")
-        firstMenu.add(buttonStartCalculate)
-        firstMenu.add(button_choose_language)
-        bot.send_message(message.chat.id, translate("Hi, it is a bot to calculate the price of your Brawl Stars account",lan), reply_markup=firstMenu)
- 
-    if state[message.chat.id] != "mainmenu":
-        try:
-            if (message.text).count(".") > 0:
-                bot.send_message(message.chat.id, translate("enter integer",lan))
-                state[message.chat.id] = "coins"
-            else:
-                coins = int(message.text)
-                state[message.chat.id] = "gems"
-
-                if lan == "uk":
-                    bot.send_message(message.chat.id, "Кількість гемів🟢💎:")
-                else:
-                    bot.send_message(message.chat.id, "Gems amount🟢💎:")
-        except:
-            bot.send_message(message.chat.id, translate("enter integer",lan))
-            state[message.chat.id] = "coins"
-
-@bot.message_handler(func=lambda message: state.get(message.chat.id) == "gems")
-def mes4(message):
-    global gems
-    if message.text == translate("back to main menu",lan).lower():
-        state[message.chat.id] = "mainmenu" 
-        firstMenu = types.InlineKeyboardMarkup()
-        buttonStartCalculate = types.InlineKeyboardButton(translate("Calculate Your Price💰",lan), callback_data="calculate")
-        button_choose_language=types.InlineKeyboardButton(translate("change the language",lan), callback_data="changelan")
-        firstMenu.add(buttonStartCalculate)
-        firstMenu.add(button_choose_language)
-        bot.send_message(message.chat.id, translate("Hi, it is a bot to calculate the price of your Brawl Stars account",lan), reply_markup=firstMenu)
- 
-    if state[message.chat.id] != "mainmenu":
-        try:
-            if (message.text).count(".") > 0:
-                bot.send_message(message.chat.id, translate("enter integer",lan))
-                state[message.chat.id] = "gems"
-            else:
-                gems = int(message.text)
-                state[message.chat.id] = "powpoints"
-                if lan == "uk":
-                    bot.send_message(message.chat.id, "Кількість очок сили🟣💎: ")
-                else:
-                    bot.send_message(message.chat.id, "Power Points amount🟣💎: ")
-        except:
-            bot.send_message(message.chat.id, translate("enter integer",lan))
-            state[message.chat.id] = "gems"
-@bot.message_handler(func=lambda message: state.get(message.chat.id) == "powpoints")
-def mes5(message):
-    global powpoints,state
-    if message.text == translate("back to main menu",lan).lower():
-        state[message.chat.id] = "mainmenu" 
-        firstMenu = types.InlineKeyboardMarkup()
-        buttonStartCalculate = types.InlineKeyboardButton(translate("Calculate Your Price💰",lan), callback_data="calculate")
-        button_choose_language=types.InlineKeyboardButton(translate("change the language",lan), callback_data="changelan")
-        firstMenu.add(buttonStartCalculate)
-        firstMenu.add(button_choose_language)
-        bot.send_message(message.chat.id, translate("Hi, it is a bot to calculate the price of your Brawl Stars account",lan), reply_markup=firstMenu)
- 
-    if state[message.chat.id] != "mainmenu":
-        if True:
-            if (message.text).count(".") > 0:
-                bot.send_message(message.chat.id, translate("enter integer",lan))
-                state[message.chat.id] = "powpoints"
-            else:
-                powpoints = int(message.text)
-                data = getuserinfo(f'https://bsproxy.royaleapi.dev/v1/players/%23{tag[1:].upper()}',getUserToken)
-                if data == False:
-                    bot.send_message(message.chat.id,translate("please, enter the valid tag and try again",lan))
-                    state[message.chat.id] = "tag"
-                else:
-                    bot.send_message(message.chat.id, translate("Price of this account is: ",lan))
-                    bot.send_message(message.chat.id,translate(f"{round(calculateprice(coins,powpoints,blings,gems,getuserinfo(f'https://bsproxy.royaleapi.dev/v1/players/%23{tag[1:].upper()}',getUserToken)),2)} $",lan))
-                    state[message.chat.id] = "mainmenu" 
-                    firstMenu = types.InlineKeyboardMarkup()
-                    buttonStartCalculate = types.InlineKeyboardButton(translate("Calculate Your Price💰",lan), callback_data="calculate")
-                    button_choose_language=types.InlineKeyboardButton(translate("change the language",lan), callback_data="changelan")
-                    firstMenu.add(buttonStartCalculate)
-                    firstMenu.add(button_choose_language)
-                    bot.send_message(message.chat.id, translate("Hi, it is a bot to calculate the price of your Brawl Stars account",lan), reply_markup=firstMenu)
- 
-                    state[message.chat.id] = "tag"
-
-bot.polling()
 
 
